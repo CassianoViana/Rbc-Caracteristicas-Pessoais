@@ -3,58 +3,75 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="node_modules/semantic-ui/dist/semantic.css">
 	<script type="text/javascript" src="node_modules/angular/angular.js"></script>	
 	<script src="csv-reader.js"></script>
+	<style type="text/css">
+		body{
+			margin: 0 50px;
+		}
+		section {
+			margin-bottom: 40px;
+		}
+		table { overflow-x: scroll; }
+		td, th, th > input, td > input  {
+			width: 50px;
+		}
+	</style>
 </head>
 <body ng-app="rbc" ng-controller="rbcController">
 
 	<h1>RBC - Caracteríscias Pessoais</h1>
 
 	<section>
-		<h3>Arquivo de características:</h3>
+		<h2>Arquivo de características</h2>
 		<div>
-			<textarea cols="200" rows="10" ng-model="dados">
+			<textarea cols="200" rows="10" ng-model="dados" ng-keydown="buildCasesTable(dados)">
 			</textarea>
 		</div>
 	</section>
 
 	<section>
 		<h2>Entrada</h2>
-		<table>
-			<ttbody>
+		<table class="ui small celled table">
+			<thead>
 				<tr>
+					<th>Similaridade</th>
 					<th ng-repeat="f in features">{{f.name}}</th>
 				</tr>
+			</thead>
+			<tbody>
 				<tr>
-					<th ng-repeat="f in features">
-						<input type="number" ng-model="entrada[$index]">
-					</th>
+					<td></td>
+					<td ng-repeat="f in features">
+						<input type="number" ng-model="newCase[$index]">
+					</td>
 				</tr>
 			</tbody>
-			
 		</table>
-	</section>
 
-	<div>
-		<input type="button" value="Analisar" ng-click="analisar(dados)">
-	</div>
+		<input type="button" class="ui primary button" value="Analisar" ng-click="analisar(newCase, dados)">
+	</section>
 
 	<section>
 		<h2>Resultado</h2>
-		<table>
+		<table class="ui small celled striped table">
 			<thead>
 				<tr>
+					<th>Similaridade</th>
 					<th ng-repeat="f in features">{{f.name}}</th>
 				</tr>
 				<tr>
+					<th>Grau</th>
 					<th ng-repeat="f in features">
-						<input type="number" ng-model="c.grau">
+						<input type="number" ng-model="f.grau">
 					</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="row in rows">
-					<td ng-repeat="cell in row.cells track by $index">{{cell}}</td>
+				<tr ng-repeat="case in cases | orderBy: 'case.similarity'">
+					<td> {{case.similarity}}</td>
+					<td ng-repeat="cell in case.cells track by $index">{{cell}}</td>
 				</tr>
 			</tbody>
 		</table>
