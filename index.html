@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript" src="node_modules/angular/angular.js"></script>	
+	<script src="csv-reader.js"></script>
+</head>
+<body ng-app="rbc" ng-controller="rbcController">
+
+	<h1>RBC - Caracteríscias Pessoais</h1>
+
+	<section>
+		<h3>Arquivo de características:</h3>
+		<div>
+			<textarea cols="200" rows="10" ng-model="dados">
+			</textarea>
+		</div>
+	</section>
+
+	<section>
+		<h2>Entrada</h2>
+		<table>
+			<ttbody>
+				<tr>
+					<th ng-repeat="f in features">{{f.name}}</th>
+				</tr>
+				<tr>
+					<th ng-repeat="f in features">
+						<input type="number" ng-model="entrada[$index]">
+					</th>
+				</tr>
+			</tbody>
+			
+		</table>
+	</section>
+
+	<div>
+		<input type="button" value="Analisar" ng-click="analisar(dados)">
+	</div>
+
+	<section>
+		<h2>Resultado</h2>
+		<table>
+			<thead>
+				<tr>
+					<th ng-repeat="f in features">{{f.name}}</th>
+				</tr>
+				<tr>
+					<th ng-repeat="f in features">
+						<input type="number" ng-model="c.grau">
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="row in rows">
+					<td ng-repeat="cell in row.cells track by $index">{{cell}}</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</section>
+
+	<script type="text/javascript" src="app.js"></script>
+</body>
+</html>
