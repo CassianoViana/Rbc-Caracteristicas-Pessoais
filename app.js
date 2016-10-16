@@ -1,43 +1,71 @@
-angular.module("rbc", []).controller("rbcController", function($scope){
+angular.module("rbc", []).controller("rbcController", function ($scope) {
 
-	function buildFeaturesModel(headRow){
-		var features = [];
-		console.log(headRow.cells);
-		headRow.cells.forEach(function(head){
-			features.push({ nome: head, grau: 1})
-		});
-		$scope.features = features;
-	}
+    $scope.newCase = []
 
-	function buildTableCases(csvRows){
-		var rows = collectCsvRows(csvRows);
-		var headRow = rows.slice(0,1);
-		var otherRows = rows.slice(1);
-		buildFeaturesModel(headRow[0]);
-		$scope.rows = rows;
-	}
+    $scope.analisar = function (newCase, csvCases) {
+        calculateAllSimilarities(newCase);
+    };
 
-	function collectRowCells(csvRow){
-		var cells = [];
-		var csvCells = csvRow.split(",");
-		csvCells.forEach(function(csvCell){
-			cells.push(csvCell);
-		});
-		return cells;
-	}
+    $scope.buildCasesTable = function(csvCases){
+        buildCasesTable(csvCases);
+    };
 
-	function collectCsvRows(csvRows){
-		var rows = [];
-		var csvRows = csvRows.split("\n");
-		csvRows.forEach(function(csvRow){			
-			var row = { cells: collectRowCells(csvRow) };
-			rows.push(row);
-		});
-		return rows;
-	}
+    // build table cases ---------------------------------------------------
 
-	$scope.analisar = function(csvRows){
-		buildTableCases(csvRows);
-	}
+    function buildCasesTable(csvCases) {
+        var cases = collectCsvCases(csvCases);
+        var headRow = cases.slice(0, 1);
+        var otherCases = cases.slice(1);
+        buildFeaturesModel(headRow[0]);
+        $scope.cases = otherCases;
+    }
 
+    function collectCsvCases(csvCases) {
+        var cases = [];
+        csvCases = csvCases.split("\n");
+        csvCases.forEach(function (csvRow) {
+            var row = {cells: collectRowCells(csvRow)};
+            cases.push(row);
+        });
+        return cases;
+    }
+
+    function collectRowCells(csvRow) {
+        var cells = [];
+        var csvCells = csvRow.split(",");
+        csvCells.forEach(function (csvCell) {
+            cells.push(csvCell);
+        });
+        return cells;
+    }
+
+    function buildFeaturesModel(headRow) {
+        var features = [];
+        headRow.cells.forEach(function (head) {
+            features.push({name: head, grau: 10})
+        });
+        $scope.features = features;
+    }
+
+    // calculate similarity ------------------------------------------------
+
+    function calculateAllSimilarities(newCase){
+        var cases = $scope.cases;
+        cases.forEach(function(caseObject){
+            var comparingCase = caseObject.cells;
+            caseObject.similarity = calculateSimilarity(newCase, comparingCase);
+        })
+    }
+
+    function calculateSimilarity(newCase, comparingCase) {
+        var similarity = 0;
+        var nrItensCompare = newCase.length;
+        for(var i = 0; i < nrItensCompare; i++){
+            var valNewCase = newCase[i] || 0;
+            var valCmpCase = comparingCase[i] || 0;
+            var diff = valNewCase - valCmpCase;
+            similarity += Math.abs(diff);
+        }
+        return similarity;
+    }
 });
