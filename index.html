@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<title>RBC - Pessoas</title>
 	<link rel="stylesheet" type="text/css" href="node_modules/semantic-ui/dist/semantic.css">
 	<script type="text/javascript" src="node_modules/angular/angular.js"></script>	
 	<script src="csv-reader.js"></script>
@@ -21,12 +21,12 @@
 </head>
 <body ng-app="rbc" ng-controller="rbcController">
 
-	<h1>RBC - Caracteríscias Pessoais</h1>
+	<h1>RBC - Características Pessoais</h1>
 
 	<section>
 		<h2>Arquivo de características</h2>
 		<div>
-			<textarea cols="200" rows="10" ng-model="dados" ng-keydown="buildCasesTable(dados)">
+			<textarea cols="200" rows="10" ng-model="dados">
 			</textarea>
 		</div>
 	</section>
@@ -42,13 +42,20 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td></td>
+					<td>Novo caso</td>
 					<td ng-repeat="f in features">
 						<input type="number" ng-model="newCase[$index]">
 					</td>
 				</tr>
+				<tr>
+					<td>Grau</td>
+					<td ng-repeat="f in features">
+						<input type="number" ng-model="f.grau">
+					</td>
+				</tr>
 			</tbody>
 		</table>
+		<input type="button" class="ui primary button" value="Gerar Tabela" ng-click="buildCasesTable(dados)">
 		<input type="button" class="ui primary button" value="Analisar" ng-click="analisar(newCase, dados)">
 	</section>
 
@@ -60,15 +67,9 @@
 					<th>Similaridade</th>
 					<th ng-repeat="f in features">{{f.name}}</th>
 				</tr>
-				<tr>
-					<th>Grau</th>
-					<th ng-repeat="f in features">
-						<input type="number" ng-model="f.grau">
-					</th>
-				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="case in cases | orderBy: 'case.similarity'">
+				<tr ng-repeat="case in cases | orderBy:'similarity':true">
 					<td> {{case.similarity}}</td>
 					<td ng-repeat="cell in case.cells track by $index">{{cell}}</td>
 				</tr>
@@ -77,6 +78,7 @@
 
 	</section>
 
+	<script type="text/javascript" src="dados.js"></script>
 	<script type="text/javascript" src="app.js"></script>
 </body>
 </html>
