@@ -69,7 +69,7 @@ angular.module("rbc", []).controller("rbcController", function ($scope) {
             similarity += weigth * similarityFunction(valNewCase, valCmpCase, i);
             sumWeigth += weigth;
         }
-        similarity = similarity /  sumWeigth;
+        similarity = similarity / sumWeigth;
         return similarity;
     }
 
@@ -80,19 +80,16 @@ angular.module("rbc", []).controller("rbcController", function ($scope) {
             return newCaseVal == compCaseVal ? 1 : 0;
         }
 
+        // Idade
         if(column == 1){
-            var max = 100;
+            var max = 123;
             var diff = Math.abs(newCaseVal - compCaseVal);
             var result = (max - diff) / max;
             return result;
         }
 
-        if(column == 2){
-            return newCaseVal == compCaseVal ? 1 : 0;
-        }
-
         // Importância Raça .. Gosto por Compras
-        if(column >= 3  && column <= 14){
+        if(column >= 2 && column <= 13){
             var max = 10;
             var diff = Math.abs(newCaseVal - compCaseVal);
             var result = (max - diff) / max;
@@ -100,7 +97,7 @@ angular.module("rbc", []).controller("rbcController", function ($scope) {
         }
 
         // Importância Aparência .. Importância Interesses Comuns
-        if(column >= 15 && column <= 21){
+        if(column >= 14 && column <= 19){
             var max = 100;
             var diff = Math.abs(newCaseVal - compCaseVal);
             var result = (max - diff) / max;
